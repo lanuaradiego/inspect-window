@@ -1,0 +1,106 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configurar Node.js 16
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Build
+      run: |
+        npm install
+        npx webpack
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: inspect-window
+        path: dist/inspect-window.js
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v2
+
+    - name: Cargar variable tag_name con Tag
+      id: get_tag
+      run: echo ::set-output name=tag_name::${GITHUB_REF#refs/tags/}
+
+    - name: Cargar variable tag_message con Tag
+      id: get_tag_message
+      run: echo "::set-output name=tag_message::$(git tag -l --format='%(contents)' ${{ steps.get_tag.outputs.tag_name }})"
+    
+    - name: Descargar archivo compilado
+      uses: actions/download-artifact@v2
+      with:
+        name: inspect-window
+        path: dist
+
+    - name: Crear release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: ${{ steps.get_tag_message.outputs.tag_message }}
+        draft: false
+        prerelease: false
+
+    - name: Crear Release - Agregar artefacto
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/inspect-window.js
+        asset_name: inspect-window-${{ steps.get_tag.outputs.tag_name }}.js
+        asset_content_type: text/javascript
+  deploy-example:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+        contents: read
+        pages: write
+        id-token: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Descargar archivo compilado
+      uses: actions/download-artifact@v2
+      with:
+        name: inspect-window
+        path: ./gh/dist
+
+    - name: Copiar carpeta example
+      run: |
+          cp -r ./example ./gh/
+
+    - name: Configurar Pages
+      uses: actions/configure-pages@v5
+
+    - name: Subir artefacto
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './gh'
+
+    - name: Deploy en GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

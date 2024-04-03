@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"strict": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "./dist",
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/global.d.ts"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

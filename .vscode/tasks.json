@@ -1,0 +1,57 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compile webpack DEV",
+			"type": "shell",
+			"command": "npx webpack --config webpack.config.dev.js",
+			"group": "build",
+			"presentation": {
+				"reveal": "silent",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Compile webpack DEV(Watch)",
+			"type": "shell",
+			"command": "npx webpack --watch --config webpack.config.dev.js",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "silent",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Compile webpack PRD",
+			"type": "shell",
+			"command": "npx webpack --config webpack.config.prd.js",
+			"group": "build",
+			"presentation": {
+				"reveal": "silent",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Compile webpack PRD(Watch)",
+			"type": "shell",
+			"command": "npx webpack --watch --config webpack.config.prd.js",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "silent",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		}
+	]
+}

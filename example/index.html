@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>Example</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body style="padding-top: 50px;">
+	<!-- "From this moment on, the variable 'window.inspectWindow' is initialized, and InspectWindow starts intercepting logs -->
+	<script src='../dist/inspect-window.js'></script>
+
+	<fieldset>
+		<legend>console.log</legend>
+		<input id="txtLog" type="text" value="Example">
+		<button id="btnLog">Log</button>
+	</fieldset>
+
+	<fieldset>
+		<legend>console.info</legend>
+		<input id="txtInfo" type="text" value="Example">
+		<button id="btnInfo">Info</button>
+	</fieldset>
+
+	<fieldset>
+		<legend>console.warn</legend>
+		<input id="txtWarn" type="text" value="Example">
+		<button id="btnWarn">Warn</button>
+	</fieldset>
+
+	<fieldset>
+		<legend>console.error</legend>
+		<input id="txtError" type="text" value="Example">
+		<button id="btnError">Error</button>
+	</fieldset>
+
+	<br>
+	<br>
+
+	<fieldset>
+		<legend>Global Exception</legend>
+		<input id="txtException" type="text" value="Exception Message">
+		<button id="btnException">Exception</button>
+	</fieldset>
+
+	<br>
+	<br>
+
+	<fieldset>
+		<legend>console.log window (objects)</legend>
+		<button id="btnLogWindow">Log</button>
+	</fieldset>
+
+	<br>
+	<br>
+
+	<fieldset>
+		<legend>console.log array</legend>
+		<button id="btnLogArray">Log</button>
+	</fieldset>
+
+
+	<br>
+	<br>
+
+	<fieldset>
+		<legend>Arguments (console.log(1,2,3,4,5))</legend>
+		<button id="btnLogArgs">Log</button>
+	</fieldset>
+
+	<script type="text/javascript">
+		inspectWindow.show();	// Visualize on top, show the window
+
+		document.getElementById("btnLog").onclick = _ => console.log(document.getElementById("txtLog").value);
+		document.getElementById("btnInfo").onclick = _ => console.info(document.getElementById("txtInfo").value);
+		document.getElementById("btnWarn").onclick = _ => console.warn(document.getElementById("txtWarn").value);
+		document.getElementById("btnError").onclick = _ => console.error(document.getElementById("txtWarn").value);
+		document.getElementById("btnException").onclick = _ => { throw new Error(document.getElementById("txtException").value) };
+
+		document.getElementById("btnLogWindow").onclick = _ => console.log(window);
+
+		document.getElementById("btnLogArray").onclick = _ => console.log([1, true, "asd123", { a: 1, b: "d" }]);
+
+		document.getElementById("btnLogArgs").onclick = _ => console.log(1, 2, 3, 4, "...");
+	</script>
+</body>
+
+</html>
